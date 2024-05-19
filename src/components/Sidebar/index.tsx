@@ -17,7 +17,8 @@ const Sidebar = () => {
             display: "flex",
             flexDirection: "column",
             height: "100%",
-            padding: 5,
+            paddingX: 3,
+            paddingY:5,
             gap: 1,
          }}
       >

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { API,setAuthToken } from "../../lib/api";
+import { IAuthor } from "../../types/app";
 
 interface Ilogin {
     email:string,
@@ -50,20 +51,19 @@ export const loginAsync = createAsyncThunk<
 });
 
 export const authCheckAsync = createAsyncThunk<
-string,
+IAuthor,
 string,
 {rejectValue:string}>(
-    "auth/authcheck",async (token ,{ rejectWithValue}) =>{
+    "auth/authcheck",async (_ ,{ rejectWithValue}) =>{
         try {
             const {data} = await API.get("/user/login",{
                 headers:{
-                    Authorization:`Bearer ${token}`
+                    Authorization:`Bearer ${localStorage.getItem("token")}`
                 }
             })
-            setAuthToken(token)
 
             console.log(data.data);
-            return token
+            return data.data
         } catch (error) {
             return rejectWithValue("error");
         }

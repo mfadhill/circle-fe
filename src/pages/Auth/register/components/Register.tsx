@@ -1,13 +1,12 @@
 import { Box, Typography,Button, TextField } from "@mui/material"
 import UseRegisterValdate from "../../../../lib/validation/useRegisterValidate"
-import { Link, Navigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Controller } from "react-hook-form"
 import { useAppSelector } from "../../../../store/store"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useRegisterFunction } from "../hooks/useRegister"
 
 const Register = () => {
-    const [isRegisterSuccess, setisRegisterSuccess] = useState<boolean>(false)
     const authState = useAppSelector((state) => state.auth);
 
    const { control, reset, handleSubmit } = UseRegisterValdate();

@@ -1,7 +1,7 @@
-import { IProfile } from "../../types/app";
+import { IAuthor, IProfile } from "../../types/app";
 
 export type IauthorState = {
     isLogin:boolean,
     token :string,
-    profile:IProfile
+    profile:IAuthor
 }

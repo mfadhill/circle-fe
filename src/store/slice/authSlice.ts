@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IauthorState } from "../type/type";
 import { authCheckAsync,loginAsync } from "../Asyncthunks/authAsync";
-import { IProfile } from "../../types/app";
+import { IAuthor, IProfile } from "../../types/app";
 
 const initialState : IauthorState = {
     isLogin:false,
     token:"",
-    profile: {} as IProfile
+    profile: {} as IAuthor
 }
 
 export const authSlice = createSlice({
@@ -35,7 +35,7 @@ export const authSlice = createSlice({
     
          builder.addCase(authCheckAsync.fulfilled,(state,action) => {
             state.isLogin = true;
-            state.token = action.payload;
+            state.profile = action.payload;
          })
          builder.addCase(authCheckAsync.rejected,(_,action)=>{
             console.log(`rejected ${action}`);

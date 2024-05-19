@@ -1,62 +1,70 @@
-import { Box, Typography,Button, Avatar, TextField } from "@mui/material";
-import Textarea from "@mui/joy/Textarea"
+import { Box, Typography, Button, Avatar, TextField } from "@mui/material";
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
-import { useEffect, useState } from "react";
+import ImageIcon from '@mui/icons-material/Image';
+import React, { useEffect } from "react";
 import ThreadCard from "../../components/common/ThreadCard";
-import { getThreads } from "../../lib/api/call/thread";
-import { IThread } from "../../types/app";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { getThreadsAsync } from "../../store/Asyncthunks/threadAsync";
+import usePostThread from "../../components/Sidebar/hook/useCreatePost";
+import { myProfileAsync } from "../../store/Asyncthunks/profileAsync";
 
 const Home = () => {
-   const [thread, setThread] = useState<IThread[]>([]);
+    const dispatch = useAppDispatch();
+    const { threadPost, setThreadPost, profile, postThread } = usePostThread();
+    const thread = useAppSelector((state) => state.thread.thread);
 
-   const fetchThread = async () => {
-      try {
-         const { data } = await getThreads();
+    useEffect(() => {
+        dispatch(getThreadsAsync());
+        dispatch(myProfileAsync());
+    }, [dispatch]);
 
-         console.log(data);
-         setThread(data);
-      } catch (error) {
-         console.log(error);
-      }
-   };
-
-   useEffect(() => {
-      fetchThread();
-   }, []);
-
-   return (
-      <Box>
-         <Typography variant="h5" marginLeft={2} marginTop={2}>
-            {" "}Home
-         </Typography>
-         <Box  marginTop={1} marginBottom={2} sx={{px:"8px",py:"20px", borderBottom: "1px solid rgba(255, 255, 255, 0.6)"}}>
-            <Box sx={{display:"flex",gap:2,alignItems:"center"}}>
-               <Box marginLeft={1}>
-                  <Avatar>
-
-                  </Avatar>
-               </Box>
-               <Box width={"100%"}>
-                  <TextField
-                  sx={{width:"100%",background:"#1d1d1d",color:"white",
-                     "& fieldset": { border: 'none' }
-                  }}
-                  placeholder="What is happening..."/>
-               </Box>
-               <Box>
-                  <AddPhotoAlternateRoundedIcon fontSize="large" sx={{color:"#04A51E"}}/>
-               </Box>
-               <Box>
-                  <Button  sx={{bgcolor:"#04A51E" ,color:"white",borderRadius:"20px",fontWeight:500,px:2}}>
-                  Post
-                  </Button>
-               </Box>
+    return (
+        <Box>
+            <Typography variant="h5" marginLeft={2} marginTop={2}>
+                Home
+            </Typography>
+            <Box marginTop={1} marginBottom={2} sx={{ px: "8px", py: "20px", borderBottom: "1px solid rgba(255, 255, 255, 0.6)" }}>
+                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                    <Box marginLeft={1}>
+                        <Avatar src={profile.profile.profile?.photoProfile} />
+                    </Box>
+                    <Box width={"100%"}>
+                        <TextField
+                            sx={{ width: "100%", background: "#1d1d1d", color: "white", "& fieldset": { border: 'none' } }}
+                            value={threadPost.content}
+                            placeholder="What is happening..."
+                            onChange={(e) => setThreadPost({ ...threadPost, content: e.target.value })}
+                        />
+                    </Box>
+                    <Box>
+                        <label htmlFor="contained-button-file">
+                            {!threadPost.files?.length ? (
+                                <AddPhotoAlternateRoundedIcon fontSize="large" sx={{ color: "#04A51E" }} />
+                            ) : (
+                                <Typography color={"#04A51E"} fontWeight={700} variant="h6">
+                                    {threadPost.files.length}<ImageIcon sx={{ color: "#04A51E" }} />
+                                </Typography>
+                            )}
+                        </label>
+                        <input
+                            accept="image/*"
+                            id="contained-button-file"
+                            multiple
+                            type="file"
+                            hidden
+                            onChange={(e) => setThreadPost({ ...threadPost, files: e.target.files })}
+                        />
+                    </Box>
+                    <Box>
+                        <Button sx={{ bgcolor: "#04A51E", color: "white", borderRadius: "20px", fontWeight: 500, px: 2 }} onClick={postThread}>
+                            Post
+                        </Button>
+                    </Box>
+                </Box>
             </Box>
-         </Box>
-         {thread &&
-            thread.map((item) => <ThreadCard key={item.id} thread={item} />)}
-      </Box>
-   );
+            {thread && thread.map((item) => <ThreadCard key={item.id} thread={item} />)}
+        </Box>
+    );
 };
 
 export default Home;

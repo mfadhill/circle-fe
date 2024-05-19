@@ -7,7 +7,6 @@ interface IProps {
 }
 
 const AuthorComponent: React.FC<IProps> = ({ author }) => {
-   console.log("Author", author);
 
    return (
       <Box

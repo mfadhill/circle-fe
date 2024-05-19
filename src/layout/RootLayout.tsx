@@ -1,10 +1,11 @@
 import { Box, Container } from "@mui/material";
 import { Navigate, Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { useAppSelector } from "../store/store";
+import Index from "../components/rightBar";
+// import { useAppSelector } from "../store/store";
 
 const RootLayout = () => {
-   const isLogin = useAppSelector((state)=>state.auth.isLogin)
+   // const isLogin = useAppSelector((state)=>state.auth.isLogin)
    const token = localStorage.getItem("token")
   
   if ( !token ) {
@@ -17,17 +18,18 @@ const RootLayout = () => {
          <Container
             className="container"
             sx={{
+               margin:"auto",
                display: "flex",
                height: "100vh",
                width: "100%",
                color: "#fff",
             }}
          >
-            <Box flex={1.3} sx={{}}>
+            <Box flex={1} sx={{}}>
                <Sidebar />
             </Box>
             <Box
-               flex={2.2}
+               flex={2.5}
                className="thread-container"
                sx={{
                   borderLeft: "3px solid #3f3f3f",
@@ -37,7 +39,9 @@ const RootLayout = () => {
             >
                <Outlet />
             </Box>
-            <Box flex={1.5} sx={{}}></Box>
+            <Box flex={1.5}  sx={{display:"flex",flexDirection:"column",alignContent:"center", borderRadius:"20px",marginLeft:"20px",paddingY:"20px"}}>
+               <Index/> 
+            </Box>
          </Container>
       </Box>
    );

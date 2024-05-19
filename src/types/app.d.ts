@@ -3,6 +3,8 @@ export interface IThread {
    content?: string;
    images?: IThreadImage[];
    author: IAuthor;
+   like:Ilike[],
+   reply:[]
 }
 
 export interface IThreadImage {
@@ -11,7 +13,7 @@ export interface IThreadImage {
 }
 
 export interface IAuthor {
-   id?: number;
+   id?: string;
    fullname?: string;
    profile?: IProfile;
 }
@@ -21,4 +23,12 @@ interface IProfile {
    username?: string;
    photoProfile?: string;
    cover?: string;
+}
+
+interface Ilike{
+   userId :string
+   threadId :string
+   user :IAuthor;
+   thread :IThread
+   isLike :boolean
 }

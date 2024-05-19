@@ -7,7 +7,7 @@ interface IProps {
 }
 
 const ImageComponent: React.FC<IProps> = ({ image }) => {
-   console.log(image);
+
 
    return (
       //   <Grid container sx={{ padding: 2 }}>
@@ -26,12 +26,11 @@ const ImageComponent: React.FC<IProps> = ({ image }) => {
          sx={{
             display: "flex",
             flexWrap: "wrap",
-            border: "1px solid rgba(255, 255, 255, 0.6)",
-            borderRadius: "10px",
+            
          }}
       >
          {image?.map((item) => (
-            <Box flex="1 1" minWidth={"50%"}>
+            <Box flex="1 1" minWidth={"50%"} sx={{border: "1px solid rgba(255, 255, 255, 0.6)"}}>
                <img
                   src={item.imageUrl}
                   alt="image"
@@ -39,7 +38,6 @@ const ImageComponent: React.FC<IProps> = ({ image }) => {
                      width: "100%",
                      height: "20rem",
                      objectFit: "cover",
-                     borderRadius:"15px"
                   }}
                   key={item.id}
                />

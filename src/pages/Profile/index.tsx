@@ -1,5 +1,11 @@
-const Profile = () => {
-   return <div>Profile</div>;
+import { Box } from "@mui/material";
+import Profile from "../../components/common/profile/profileIndex";
+
+const ProfilePages = () => {
+   return (
+   <Box>
+      <Profile/>
+   </Box>);
 };
 
-export default Profile;
+export default ProfilePages;
