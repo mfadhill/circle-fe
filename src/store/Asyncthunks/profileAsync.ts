@@ -16,7 +16,7 @@ void,
 
             console.log(data);
 
-            return data
+            return data;
         } catch (error) {
             return rejectWithValue("error")
         }

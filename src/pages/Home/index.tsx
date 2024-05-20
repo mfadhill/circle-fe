@@ -6,18 +6,15 @@ import ThreadCard from "../../components/common/ThreadCard";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { getThreadsAsync } from "../../store/Asyncthunks/threadAsync";
 import usePostThread from "../../components/Sidebar/hook/useCreatePost";
-import { myProfileAsync } from "../../store/Asyncthunks/profileAsync";
 
 const Home = () => {
     const dispatch = useAppDispatch();
     const { threadPost, setThreadPost, profile, postThread } = usePostThread();
     const thread = useAppSelector((state) => state.thread.thread);
-
+ 
     useEffect(() => {
         dispatch(getThreadsAsync());
-        dispatch(myProfileAsync());
     }, [dispatch]);
-
     return (
         <Box>
             <Typography variant="h5" marginLeft={2} marginTop={2}>

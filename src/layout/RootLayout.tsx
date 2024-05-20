@@ -29,7 +29,7 @@ const RootLayout = () => {
                <Sidebar />
             </Box>
             <Box
-               flex={2.5}
+               flex={2}
                className="thread-container"
                sx={{
                   borderLeft: "3px solid #3f3f3f",
@@ -39,7 +39,7 @@ const RootLayout = () => {
             >
                <Outlet />
             </Box>
-            <Box flex={1.5}  sx={{display:"flex",flexDirection:"column",alignContent:"center", borderRadius:"20px",marginLeft:"20px",paddingY:"20px"}}>
+            <Box flex={2} className="thread-container"  sx={{overflowY:"auto", display:"flex",flexDirection:"column",alignContent:"center", borderRadius:"20px",marginLeft:"20px",paddingY:"20px"}}>
                <Index/> 
             </Box>
          </Container>

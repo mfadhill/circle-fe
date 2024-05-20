@@ -1,25 +1,25 @@
 import { Box, Typography, Avatar, Button } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../store/store";
-import { useEffect } from "react";
-import { myProfileAsync } from "../../../store/Asyncthunks/profileAsync";
+import { FC } from "react";
+import { IAuthor } from "../../../types/app";
 
-const Profile = () => {
-  const profile = useAppSelector((state) => state.profile);
-  const dispath = useAppDispatch();
+interface IProps {
+  profile: IAuthor;
+}
 
-  useEffect(() => {
-    dispath(myProfileAsync());
-  }, []);
+const Profile: FC<IProps> = ({ profile }) => {
+  // Destructure properties for easier access
+  const { fullname, profile: userProfile, following = [], follower = [] } = profile;
+  const { username, bio } = userProfile || {};
 
   return (
     <Box
       width={"450px"}
-      height={"380px"}
       sx={{
         bgcolor: "#262626",
         display: "flex",
         flexDirection: "column",
         px: "20px",
+        py:"10px",
         borderRadius: "10px",
       }}
     >
@@ -45,7 +45,8 @@ const Profile = () => {
                   top: "-30px",
                   left: "5px",
                 }}
-              ></Avatar>
+                src={userProfile?.photoProfile} // Add src for Avatar
+              />
               <Button
                 sx={{
                   height: "45px",
@@ -62,7 +63,7 @@ const Profile = () => {
           </Box>
           <Box>
             <Typography variant="h6" fontWeight={700}>
-              {profile.profile.fullname}
+              {fullname}
             </Typography>
             <Typography
               marginTop={1}
@@ -70,21 +71,21 @@ const Profile = () => {
               fontWeight={500}
               color="gray"
             >
-              @{profile.profile?.profile?.username}
+              @{username}
             </Typography>
             <Typography fontWeight={400}>
-              {profile.profile?.profile?.bio}
+              {bio}
             </Typography>
           </Box>
           <Box sx={{ display: "flex", gap: "10px", mt: "15px" }}>
             <Box sx={{ display: "flex", gap: "5px" }}>
-              <Typography>0</Typography>
+              <Typography>{following.length}</Typography>
               <Typography fontWeight={400} color="gray">
                 Following
               </Typography>
             </Box>
             <Box sx={{ display: "flex", gap: "5px" }}>
-              <Typography>0</Typography>
+              <Typography>{follower.length}</Typography>
               <Typography fontWeight={400} color="gray">
                 Followers
               </Typography>

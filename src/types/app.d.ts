@@ -16,6 +16,8 @@ export interface IAuthor {
    id?: string;
    fullname?: string;
    profile?: IProfile;
+   follower:ifollower[];
+   following:Ifollowing[]
 }
 
 interface IProfile {
@@ -31,4 +33,14 @@ interface Ilike{
    user :IAuthor;
    thread :IThread
    isLike :boolean
+}
+
+interface ifollower{
+   followerId :string,
+   followingId :string
+}
+
+interface Ifollowing{
+   followerId :string,
+   followingId :string
 }

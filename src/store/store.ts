@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import authReducer from "./slice/authSlice";
 import threadReducer from "./slice/threadSlice";
-import profileReducer from "./slice/profileSlice"
+import profileReducer from "./slice/profileSlice";
+import suggestedReducer from"./slice/suggestedSlice";
 const store = configureStore({
    reducer: {
       auth:authReducer,
       thread:threadReducer,
-      profile:profileReducer
+      profile:profileReducer,
+      suggested:suggestedReducer
 
    },
 });

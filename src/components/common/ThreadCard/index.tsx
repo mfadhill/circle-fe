@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { IThread } from "../../../types/app";
+import { IAuthor, IThread } from "../../../types/app";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import AuthorComponent from "./AuthorComponent";
 import ImageComponent from "./ImageComponent";
@@ -9,7 +9,7 @@ import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { API } from "../../../lib/api";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
-import { myProfileAsync } from "../../../store/Asyncthunks/profileAsync";
+import usePostThread from "../../Sidebar/hook/useCreatePost";
 
 interface IProps {
   thread: IThread;
@@ -18,12 +18,10 @@ interface IProps {
 const ThreadCard: FC<IProps> = ({ thread }) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(thread.like.length);
-  const profile = useAppSelector((state) => state.profile);
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
+  const {profile} = usePostThread()
 
-  useEffect(() => {
-    dispatch(myProfileAsync());
-  }, [dispatch]);
+
 
   useEffect(() => {
     // Check if the current user has liked the thread
@@ -31,7 +29,7 @@ const ThreadCard: FC<IProps> = ({ thread }) => {
       const userLike = thread.like.find(like => like.userId === profile.profile.id);
       setIsLiked(Boolean(userLike));
     }
-  }, [thread.like, profile.profile?.id]);
+  }, [thread.like]);
 
   const handleLike = async () => {
     try {

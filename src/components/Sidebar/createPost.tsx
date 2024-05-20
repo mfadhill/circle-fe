@@ -6,20 +6,12 @@ import Modal from '@mui/material/Modal';
 import { Avatar, IconButton, TextField,Typography } from '@mui/material';
 import { AddPhotoAlternateOutlined } from '@mui/icons-material';
 import { useAppDispatch } from '../../store/store';
-import { getThreadsAsync } from '../../store/Asyncthunks/threadAsync';
-import { myProfileAsync } from '../../store/Asyncthunks/profileAsync';
 import usePostThread from './hook/useCreatePost';
 
 
 
  const CreatePost = () => {
-  const dispatch = useAppDispatch();
     const { open,handleOpen,handleClose,threadPost, setThreadPost, profile, postThread } = usePostThread();
-
-    React.useEffect(() => {
-        dispatch(getThreadsAsync());
-        dispatch(myProfileAsync());
-    }, [dispatch]);
   return (
     <Box>
       <Button 
