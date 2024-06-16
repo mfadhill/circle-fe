@@ -3,35 +3,36 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { API } from "../../../lib/api";
 import { getThreadsAsync } from "../../../store/Asyncthunks/threadAsync";
+import { getDetailThreadAsync } from "../../../store/Asyncthunks/getDetailThreadAsync";
 
-interface IThreadForm {
+interface IReplyForm {
     content: string;
     files: FileList | null;
 }
 
-const usePostThread:any = () => {
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [threadPost, setThreadPost] = useState<IThreadForm>({ content: "", files: null });
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    const [posting,setPosting] = useState(false)
-        const profile = useAppSelector((state) => state.profile);
+interface IProps{
+    threadId:string
+}
 
-    const postThread = async (e: React.MouseEvent) => {
+const UsePostReply:any = ({threadId}:IProps) => {
+    
+    const [replyPost, setReplyPost] = useState<IReplyForm>({ content: "", files: null });
+    const dispatch = useAppDispatch();
+    const [posting,setPosting] = useState(false)
+
+    const postReply = async (e: React.MouseEvent) => {
         e.preventDefault();
         try {
             setPosting(true)
             const formData = new FormData();
-            formData.append("content", threadPost.content);
-            if (threadPost.files) {
-                Array.from(threadPost.files).forEach((file) => {
+            formData.append("content", replyPost.content);
+            if (replyPost.files) {
+                Array.from(replyPost.files).forEach((file) => {
                     formData.append("image", file); 
                 });
             }
 
-            const res = await API.post("/threads", formData, {
+            const res = await API.post(`/threads/reply/${threadId}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                     "Content-Type": "multipart/form-data",
@@ -39,17 +40,16 @@ const usePostThread:any = () => {
             });
 
             dispatch(getThreadsAsync());
-            setThreadPost({ content: "", files: null }); 
+            dispatch(getDetailThreadAsync(threadId))
+            setReplyPost({ content:"", files: null }); 
             console.log(res);
-            handleClose()           
-            navigate("/");
             setPosting(false)
         } catch (error) {
             console.error(error);
         }
     };
 
-    return { threadPost, setThreadPost,handleOpen,handleClose,open,setOpen, profile, postThread,posting };
+    return { replyPost, setReplyPost ,postReply,posting };
 };
 
-export default usePostThread;
+export default UsePostReply;

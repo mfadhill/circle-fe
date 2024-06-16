@@ -1,38 +1,41 @@
 import { FC, useEffect, useState } from "react";
-import {  IThread } from "../../../types/app";
+import {  IReply } from "../../types/app";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
-import AuthorComponent from "./AuthorComponent";
-import ImageComponent from "./ImageComponent";
+import AuthorComponent from "../../components/common/ThreadCard/AuthorComponent";
+import ImageComponent from "../../components/common/ThreadCard/ImageComponent";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { API } from "../../../lib/api";
-import { useAppDispatch } from "../../../store/store";
-import usePostThread from "../../Sidebar/hook/useCreatePost";
-import { getThreadsAsync } from "../../../store/Asyncthunks/threadAsync";
-import { useNavigate } from "react-router-dom";
+import { API } from "../../lib/api";
+import { useAppDispatch } from "../../store/store";
+import { getThreadsAsync } from "../../store/Asyncthunks/threadAsync";
+import { useNavigate,Navigate } from "react-router-dom";
+import { getDetailThreadAsync } from "../../store/Asyncthunks/getDetailThreadAsync";
 
 interface IProps {
-  thread: IThread;
+  reply: IReply;
+  profileId:string
 }
 
-const ThreadCard: FC<IProps> = ({ thread }) => {
+const ReplyCard: FC<IProps> = ({ reply,profileId }) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const dispatch = useAppDispatch()
-  const {profile} = usePostThread()
 
   useEffect(() => {
     // Check if the current user has liked the thread
-    if (profile.profile?.id) {
-      const userLike = thread.like.find(like => like.userId === profile.profile.id);
+    if (profileId) {
+      const userLike = reply.like.find(like => like.userId === profileId);
       setIsLiked(Boolean(userLike));
     }
-  }, [thread.like]);
+  }, [reply.like]);
 
   const navigate = useNavigate()
+  const handleNavigate = () => {
+    navigate(`/thread/detail/${reply.id}`);
+  };
   const handleLike = async () => {
     try {
-      const { data } = await API.post(`/like/${thread.id}`, {}, {
+      const { data } = await API.post(`/like/${reply.id}`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -41,15 +44,12 @@ const ThreadCard: FC<IProps> = ({ thread }) => {
       // Update like state based on API response
       setIsLiked(data.like);
       dispatch(getThreadsAsync())
-  }
-  catch(error){
-    console.log(error);
-    
-  }
-}
+      if(reply.threadId )dispatch(getDetailThreadAsync(reply.threadId))
+    } catch (error) {
+      console.error("Error liking the post:", error);
+    }
+  };
 
-  if(thread.threadId != null)
-    return null
   return (
     <Box
       sx={{
@@ -60,29 +60,29 @@ const ThreadCard: FC<IProps> = ({ thread }) => {
         py: 1,
       }}
     >
-      <Avatar alt="ava" src={thread.author?.profile?.photoProfile} />
+      <Avatar alt="ava" src={reply.author?.profile?.photoProfile} />
       <Box
         sx={{
           width: "100%",
         }}
       >
-        <AuthorComponent author={thread.author} createdAt={thread.createdAt}/>
-        <Typography>{thread.content}</Typography>
-        {thread.images && thread.images.length > 0 && (
-          <ImageComponent image={thread.images} />
+        <AuthorComponent author={reply.author} createdAt={reply.createdAt}/>
+        <Typography>{reply.content}</Typography>
+        {reply.images && reply.images.length > 0 && (
+          <ImageComponent image={reply.images} />
         )}
         <Box sx={{ display: "flex", gap: "5px", alignItems: "center", mt: "10px" }}>
           <IconButton onClick={handleLike}>
             {isLiked ? <FavoriteIcon fontSize="small" color="error" /> : <FavoriteBorderIcon fontSize="small" />}
           </IconButton>
           <Typography>
-            {thread.like?.length}
+            {reply.like?.length}
           </Typography>
-          <IconButton onClick={(e)=>navigate(`thread/detail/${thread.id}`)}>
+          <IconButton onClick={(e)=>handleNavigate()}>
             <CommentOutlinedIcon/>
           </IconButton>
           <Typography>
-            {thread.reply?.length}  reply
+            {reply.reply?.length}  reply
           </Typography>
         </Box>
       </Box>
@@ -90,4 +90,4 @@ const ThreadCard: FC<IProps> = ({ thread }) => {
   );
 };
 
-export default ThreadCard;
+export default ReplyCard;

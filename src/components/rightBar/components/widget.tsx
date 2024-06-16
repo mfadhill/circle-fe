@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const Widget = () => {
     return (
         <Box
-            width={"450px"}
+            width={"100%"}
             sx={{
                 bgcolor: "#262626",
                 display: "flex",
@@ -26,7 +26,8 @@ const Widget = () => {
                     <Link style={{ textDecoration: "none" }} to={"https://www.instagram.com/_freihan_/"}><InstagramIcon sx={{color:"white"}} fontSize="small"/></Link >
                 </Typography>
                 <Typography variant="body2" fontSize={"small"}  color="grey" fontWeight={500} paddingX={"10px"}>
-                    Powered by  Dumbways {" "}  <img width={"24px"} height={"15px"} src="../../../public/dwlogo.png"/>  {" "} Indonesia • #1 Codding Bootcamp
+                    Powered by  Dumbways {" "}  <img width={"24px"} height={"15px"} src="../../../public/dwlogo.png"/>  {" "} 
+                    <br/> Indonesia • #1 Codding Bootcamp
                 </Typography>
             </Box>
         </Box>

@@ -1,17 +1,15 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import Modal from '@mui/material/Modal';
 import { Avatar, IconButton, TextField,Typography } from '@mui/material';
 import { AddPhotoAlternateOutlined } from '@mui/icons-material';
-import { useAppDispatch } from '../../store/store';
 import usePostThread from './hook/useCreatePost';
 
 
 
  const CreatePost = () => {
-    const { open,handleOpen,handleClose,threadPost, setThreadPost, profile, postThread } = usePostThread();
+    const { open,handleOpen,handleClose,threadPost, setThreadPost, profile, postThread,posting } = usePostThread();
   return (
     <Box>
       <Button 
@@ -40,9 +38,7 @@ import usePostThread from './hook/useCreatePost';
             </Box>
             <Box sx={{display:"flex",gap:2,alignItems:"start",justifyContent:"center"}}marginTop={1} paddingX={2}>
                <Box marginLeft={1}>
-                  <Avatar src={profile.profile.profile?.username}>
-
-                  </Avatar>
+                  <Avatar src={profile.profile.profile?.photoProfile}/>
                </Box>
                <Box width={"100%"}>
                <TextField
@@ -74,7 +70,7 @@ import usePostThread from './hook/useCreatePost';
                         />
                     </Box>
                <Box>
-                  <Button onClick={postThread } sx={{bgcolor:"#04A51E" ,color:"white",borderRadius:"20px",fontWeight:500,px:2}}>
+                  <Button disabled={posting} onClick={postThread } sx={{bgcolor:"#04A51E" ,color:"white",borderRadius:"20px",fontWeight:500,px:2}}>
                   Post
                   </Button>
                </Box>

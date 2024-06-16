@@ -1,25 +1,27 @@
 import { Box, Typography, Avatar, Button } from "@mui/material";
-import { FC } from "react";
-import { IAuthor } from "../../../types/app";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
+import { myProfileAsync } from "../../../store/Asyncthunks/profileAsync";
+import ModalEdit from "../../common/profile/component/modalEdit";
 
-interface IProps {
-  profile: IAuthor;
-}
+const Profile = () => {
+  const myProfile = useAppSelector((state) => state.profile);
+  const dispatch = useAppDispatch();
 
-const Profile: FC<IProps> = ({ profile }) => {
-  // Destructure properties for easier access
-  const { fullname, profile: userProfile, following = [], follower = [] } = profile;
-  const { username, bio } = userProfile || {};
+  const { profile } = myProfile;
 
+  useEffect(() => {
+    dispatch(myProfileAsync());
+  }, [dispatch]);
   return (
     <Box
-      width={"450px"}
+      width={"100%"}
       sx={{
         bgcolor: "#262626",
         display: "flex",
         flexDirection: "column",
         px: "20px",
-        py:"10px",
+        py: "10px",
         borderRadius: "10px",
       }}
     >
@@ -30,12 +32,16 @@ const Profile: FC<IProps> = ({ profile }) => {
       </Box>
       <Box>
         <Box>
-          <Box width={"410px"}>
+          <Box width={"100%"}>
             <img
               style={{ borderRadius: "10px" }}
               width="100%"
               height="100px"
-              src="https://s3-alpha-sig.figma.com/img/ff72/df09/d00360c5841aa3f95403eff20cb41f19?Expires=1716768000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=owG4eqbcoefMPo4LJLbhm-W6MahMUaSL22GPhKHLJU9ci9QihySvSgAU2-axwo1KqEvz1mw454kc3OzwiMKN9rOlb9jKEGXy1mPwJR806LWVkbnKEDVD6nVApPdzCOciND9dMyqaYtdwztJ~gJP-QuXzM9h9m~RwRwB3aCCJWQVGtYbgcHND~ukNIVDbHKUOxdbbnzTunYCjO0fkE-qWj6GaTchm7S-ONaXIoOOARD7ATyq5ktjOaso2R~Gl7QkAkfA278THrLPIKPmZtrv~dLhxhYPzGYSGoyBo2yIe0GReejQc6RXlSfYjzskk60610b2k6H340BWukJRt8wyBNQ__"
+              src={
+                profile.profile?.cover
+                  ? profile.profile?.cover
+                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNS7GXzIFW6w2yv0B9qVkHc8lPiYmUiuiEfnrprAVn0A&s"
+              }
             />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Avatar
@@ -45,25 +51,22 @@ const Profile: FC<IProps> = ({ profile }) => {
                   top: "-30px",
                   left: "5px",
                 }}
-                src={userProfile?.photoProfile} // Add src for Avatar
+                src={profile.profile?.photoProfile}
               />
-              <Button
-                sx={{
-                  height: "45px",
-                  borderRadius: "10px",
-                  border: "2px solid white",
-                  color: "white",
-                  fontWeight: 500,
-                  px: 2,
-                }}
-              >
-                Edit Profile
-              </Button>
+              <ModalEdit
+                userId={profile.id!}
+                bio={profile.profile?.bio!}
+                cover={profile.profile?.cover!}
+                fullname={profile.fullname!}
+                photoProfile={profile.profile?.photoProfile!}
+                username={profile.profile?.username!}
+                key={profile.id!}
+              />
             </Box>
           </Box>
           <Box>
             <Typography variant="h6" fontWeight={700}>
-              {fullname}
+              {profile.fullname}
             </Typography>
             <Typography
               marginTop={1}
@@ -71,21 +74,19 @@ const Profile: FC<IProps> = ({ profile }) => {
               fontWeight={500}
               color="gray"
             >
-              @{username}
+              @{profile.profile?.username}
             </Typography>
-            <Typography fontWeight={400}>
-              {bio}
-            </Typography>
+            <Typography fontWeight={400}>{profile.profile?.bio}</Typography>
           </Box>
           <Box sx={{ display: "flex", gap: "10px", mt: "15px" }}>
             <Box sx={{ display: "flex", gap: "5px" }}>
-              <Typography>{following.length}</Typography>
+              <Typography>{profile.following?.length || 0}</Typography>
               <Typography fontWeight={400} color="gray">
                 Following
               </Typography>
             </Box>
             <Box sx={{ display: "flex", gap: "5px" }}>
-              <Typography>{follower.length}</Typography>
+              <Typography>{profile.follower?.length || 0}</Typography>
               <Typography fontWeight={400} color="gray">
                 Followers
               </Typography>

@@ -1,16 +1,23 @@
-import { Box, Typography,Button, TextField } from "@mui/material"
+import { Box, Typography,Button, TextField, IconButton } from "@mui/material"
 import useLoginValidate from "../../../../lib/validation/useLoginValidate"
 import { Link } from "react-router-dom"
 import { Controller } from "react-hook-form"
 import { useAppSelector } from "../../../../store/store"
 import { useLoginFunction } from "../hooks/useLogin"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
+import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
 
 const Login = () => {
     const authState = useAppSelector((state) => state.auth);
 
    const { control, reset, handleSubmit } = useLoginValidate();
    const { onErrorSubmit, onSubmit } = useLoginFunction({ reset });
+    const [isShow ,setIsShow] = useState(false)
+
+    const togglePasswordVisibility = () => {
+        setIsShow(prevState => !prevState);
+    };
 
    useEffect(() => {
       console.log(authState);
@@ -51,14 +58,27 @@ const Login = () => {
                             control={control}
                             name="password"
                             render={({ field, fieldState }) => (
+                                <>
                                 <TextField
                                     label="Password *"
                                     color="success"
+                                    type={isShow? "text" :"password"}
                                     sx={{ borderColor: "white" }}
                                     {...field}
                                     helperText={fieldState.error?.message}
                                     error={Boolean(fieldState.error)}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <IconButton
+                                                onClick={togglePasswordVisibility}
+                                                edge="end"
+                                            >
+                                                {isShow ? <VisibilityRoundedIcon /> : <VisibilityOffRoundedIcon />}
+                                            </IconButton>
+                                        )
+                                    }}
                                 />
+                                </>
                             )}
                         />
                     </Box>

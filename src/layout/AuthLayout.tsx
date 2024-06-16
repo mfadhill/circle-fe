@@ -5,7 +5,7 @@ import { useAppSelector } from '../store/store'
 const AuthLayout = () => {
   const isLogin = useAppSelector((state)=>state.auth.isLogin)
   const token = localStorage.getItem("token")
-  if ( token ) {
+  if ( isLogin ) {
     return(
       <Navigate to={"/"}/>
     )

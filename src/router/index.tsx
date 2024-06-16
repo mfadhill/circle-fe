@@ -7,6 +7,7 @@ import Login from "../pages/Auth/login/components/Login";
 import Followings from "../pages/Followings";
 import AuthLayout from "../layout/AuthLayout";
 import Register from "../pages/Auth/register/components/Register";
+import DetailThread from "../pages/detailThread//detailThread";
 
 
 const router: RouteObject[] = [
@@ -19,7 +20,7 @@ const router: RouteObject[] = [
             element: <Home />,
          },
          {
-            path: "profile",
+            path: "profile/:profileId",
             element: <ProfilePages />,
          },
          {
@@ -29,9 +30,14 @@ const router: RouteObject[] = [
          {
             path: "follows",
             element: <Followings />,
-         },
+         }
       ]   
-   },{
+   },
+   {
+      path:"thread/detail/:threadId",
+      element:<DetailThread/>
+   },
+   {
       path:"/auth",
       element:<AuthLayout/>,
       children:[

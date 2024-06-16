@@ -3,8 +3,21 @@ export interface IThread {
    content?: string;
    images?: IThreadImage[];
    author: IAuthor;
+   createdAt:string,
+   threadId:null
    like:Ilike[],
-   reply:[]
+   reply:IReply[]
+}
+
+export interface IReply{
+   threadId?:string
+   id?: number;
+   content?: string;
+   images?: IThreadImage[];
+   author: IAuthor;
+   createdAt:string,
+   like:Ilike[],
+   reply:IReply[]
 }
 
 export interface IThreadImage {
@@ -35,12 +48,16 @@ interface Ilike{
    isLike :boolean
 }
 
-interface ifollower{
+interface Ifollower{
    followerId :string,
-   followingId :string
+   followingId :string,
+   isFollow:boolean,
+   following:IAuthor
 }
 
 interface Ifollowing{
    followerId :string,
-   followingId :string
+   followingId :string,
+   isFollow:boolean,
+   follower:IAuthor
 }

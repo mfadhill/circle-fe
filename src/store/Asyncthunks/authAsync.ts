@@ -61,7 +61,6 @@ string,
                     Authorization:`Bearer ${localStorage.getItem("token")}`
                 }
             })
-
             console.log(data.data);
             return data.data
         } catch (error) {

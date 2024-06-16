@@ -9,9 +9,9 @@ import usePostThread from "../../components/Sidebar/hook/useCreatePost";
 
 const Home = () => {
     const dispatch = useAppDispatch();
-    const { threadPost, setThreadPost, profile, postThread } = usePostThread();
-    const thread = useAppSelector((state) => state.thread.thread);
- 
+    const { threadPost, setThreadPost, profile, postThread,posting } = usePostThread();
+    const thread = useAppSelector((state) => state.threads.thread);
+    
     useEffect(() => {
         dispatch(getThreadsAsync());
     }, [dispatch]);
@@ -38,7 +38,7 @@ const Home = () => {
                             {!threadPost.files?.length ? (
                                 <AddPhotoAlternateRoundedIcon fontSize="large" sx={{ color: "#04A51E" }} />
                             ) : (
-                                <Typography color={"#04A51E"} fontWeight={700} variant="h6">
+                                <Typography color={"#04A51E"} sx={{display:"flex",justifyContent:"center"}} fontWeight={700} variant="h6">
                                     {threadPost.files.length}<ImageIcon sx={{ color: "#04A51E" }} />
                                 </Typography>
                             )}
@@ -53,7 +53,7 @@ const Home = () => {
                         />
                     </Box>
                     <Box>
-                        <Button sx={{ bgcolor: "#04A51E", color: "white", borderRadius: "20px", fontWeight: 500, px: 2 }} onClick={postThread}>
+                        <Button disabled={posting} sx={{ bgcolor: "#04A51E", color: "white", borderRadius: "20px", fontWeight: 500, px: 2 }} onClick={postThread}>
                             Post
                         </Button>
                     </Box>

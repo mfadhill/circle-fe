@@ -3,11 +3,14 @@ import { IauthorState } from "../type/type";
 import { authCheckAsync,loginAsync } from "../Asyncthunks/authAsync";
 import { IAuthor, IProfile } from "../../types/app";
 
-const initialState : IauthorState = {
-    isLogin:false,
-    token:"",
+const storedToken = localStorage.getItem('token');
+const initialIsLogin = storedToken ? true : false;
+
+const initialState: IauthorState = {
+    isLogin: initialIsLogin,
+    token: storedToken || "",
     profile: {} as IAuthor
-}
+};
 
 export const authSlice = createSlice({
     name:"auth",
@@ -48,5 +51,5 @@ export const authSlice = createSlice({
      
 })
 
-export default authSlice.reducer;
 export const {LOGIN}= authSlice.actions
+export default authSlice.reducer;

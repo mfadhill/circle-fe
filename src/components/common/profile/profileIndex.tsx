@@ -1,26 +1,56 @@
-import { Box, Typography, Avatar, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Avatar,
+  Button,
+  Tab,
+  ImageList,
+  ImageListItem,
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import { getProfileAsync } from "../../../store/Asyncthunks/GetProfileAsync";
+import { useParams } from "react-router-dom";
 import { myProfileAsync } from "../../../store/Asyncthunks/profileAsync";
+import ThreadCard from "../ThreadCard";
+import { getThreadbyProfile } from "../../../store/Asyncthunks/getThreadProfileAsync";
+import ModalEdit from "./component/modalEdit";
 
 const Profile = () => {
-  const profile = useAppSelector((state) => state.profile);
+  const profile = useAppSelector((state) => state.getProfile);
   const dispath = useAppDispatch();
+  const Params = useParams();
+  useEffect(() => {
+    dispath(getProfileAsync(Params.profileId || ""));
+  }, [Params]);
 
+  const profileLogin = useAppSelector((state) => state.profile);
   useEffect(() => {
     dispath(myProfileAsync());
   }, []);
 
+  const threads = useAppSelector((state) => state.ThreadbyProfile.threads);
+  useEffect(() => {
+    dispath(getThreadbyProfile(Params.profileId || ""));
+  }, []);
+
+  const [value, setValue] = React.useState("1");
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
   return (
     <Box
-      width={"450px"}
-      height={"380px"}
+      width={"100%"}
       sx={{
-        bgcolor: "#262626",
+        bgcolor: "#1d1d1d",
         display: "flex",
         flexDirection: "column",
-        px: "20px",
         borderRadius: "10px",
+        gap: "10px",
       }}
     >
       <Box>
@@ -29,16 +59,21 @@ const Profile = () => {
         </Typography>
       </Box>
       <Box>
-        <Box>
-          <Box width={"410px"}>
+        <Box paddingX={"20px"}>
+          <Box width={"100%"}>
             <img
               style={{ borderRadius: "10px" }}
               width="100%"
-              height="100px"
-              src="https://s3-alpha-sig.figma.com/img/ff72/df09/d00360c5841aa3f95403eff20cb41f19?Expires=1716768000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=owG4eqbcoefMPo4LJLbhm-W6MahMUaSL22GPhKHLJU9ci9QihySvSgAU2-axwo1KqEvz1mw454kc3OzwiMKN9rOlb9jKEGXy1mPwJR806LWVkbnKEDVD6nVApPdzCOciND9dMyqaYtdwztJ~gJP-QuXzM9h9m~RwRwB3aCCJWQVGtYbgcHND~ukNIVDbHKUOxdbbnzTunYCjO0fkE-qWj6GaTchm7S-ONaXIoOOARD7ATyq5ktjOaso2R~Gl7QkAkfA278THrLPIKPmZtrv~dLhxhYPzGYSGoyBo2yIe0GReejQc6RXlSfYjzskk60610b2k6H340BWukJRt8wyBNQ__"
+              height="150px"
+              src={
+                profile.detailProfile.profile?.cover
+                  ? profile.detailProfile.profile.cover
+                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNS7GXzIFW6w2yv0B9qVkHc8lPiYmUiuiEfnrprAVn0A&s"
+              }
             />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Avatar
+                src={profile.detailProfile.profile?.photoProfile}
                 sx={{
                   width: "80px",
                   height: "80px",
@@ -46,23 +81,35 @@ const Profile = () => {
                   left: "5px",
                 }}
               ></Avatar>
-              <Button
-                sx={{
-                  height: "45px",
-                  borderRadius: "10px",
-                  border: "2px solid white",
-                  color: "white",
-                  fontWeight: 500,
-                  px: 2,
-                }}
-              >
-                Edit Profile
-              </Button>
+              {profile.detailProfile.id === profileLogin.profile.id ? (
+                <ModalEdit
+                  userId={profile.detailProfile.id!}
+                  photoProfile={profile.detailProfile.profile?.photoProfile!}
+                  cover={profile.detailProfile.profile?.cover!}
+                  bio={profile.detailProfile.profile?.bio!}
+                  username={profile.detailProfile.profile?.username!}
+                  fullname={profile.detailProfile.fullname!}
+                  key={profile.detailProfile.id!}
+                />
+              ) : (
+                <Button
+                  sx={{
+                    height: "45px",
+                    borderRadius: "10px",
+                    border: "2px solid white",
+                    color: "white",
+                    fontWeight: 500,
+                    px: 2,
+                  }}
+                >
+                  Follow
+                </Button>
+              )}
             </Box>
           </Box>
           <Box>
             <Typography variant="h6" fontWeight={700}>
-              {profile.profile.fullname}
+              {profile.detailProfile.fullname}
             </Typography>
             <Typography
               marginTop={1}
@@ -70,27 +117,143 @@ const Profile = () => {
               fontWeight={500}
               color="gray"
             >
-              @{profile.profile?.profile?.username}
+              @{profile.detailProfile?.profile?.username}
             </Typography>
             <Typography fontWeight={400}>
-              {profile.profile?.profile?.bio}
+              {profile.detailProfile.profile?.bio}
             </Typography>
           </Box>
           <Box sx={{ display: "flex", gap: "10px", mt: "15px" }}>
             <Box sx={{ display: "flex", gap: "5px" }}>
-              <Typography>0</Typography>
+              <Typography>
+                {profile.detailProfile.following?.length || 0}
+              </Typography>
               <Typography fontWeight={400} color="gray">
                 Following
               </Typography>
             </Box>
             <Box sx={{ display: "flex", gap: "5px" }}>
-              <Typography>0</Typography>
+              <Typography>
+                {profile.detailProfile.follower?.length || 0}
+              </Typography>
               <Typography fontWeight={400} color="gray">
                 Followers
               </Typography>
             </Box>
           </Box>
         </Box>
+      </Box>
+      <Box sx={{ width: "100%", typography: "body1" }}>
+        <TabContext value={value}>
+          <Box
+            sx={{
+              borderBottom: "3px solid #04A51E",
+              borderColor: "ActiveCaption",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TabList
+              onChange={handleChange}
+              variant="fullWidth"
+              sx={{ width: "100%" }}
+              textColor="primary"
+              TabIndicatorProps={{
+                style: {
+                  backgroundColor: "#04A51E",
+                },
+              }}
+            >
+              <Tab
+                label="All Post"
+                value="1"
+                sx={{
+                  padding: "20px",
+                  "&.Mui-selected": {
+                    color: "white",
+                  },
+                  borderBottom: "2px solid transparent",
+                }}
+              />
+              <Tab
+                label="Media"
+                value="2"
+                sx={{
+                  padding: "20px",
+                  "&.Mui-selected": {
+                    color: "white",
+                  },
+                  borderBottom: "2px solid transparent",
+                }}
+              />
+            </TabList>
+          </Box>
+          <TabPanel value="1">
+            {threads.length === 0 ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  textAlign: "center",
+                }}
+              >
+                <Typography>No thread post yet</Typography>
+              </Box>
+            ) : (
+              threads &&
+              threads.map((item) => <ThreadCard key={item.id} thread={item} />)
+            )}
+          </TabPanel>
+          <TabPanel value="2">
+            {threads.length === 0 ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  textAlign: "center",
+                }}
+              >
+                <Typography>No media post yet</Typography>
+              </Box>
+            ) : (
+              threads.map((thread) =>
+                thread.images?.length === 0 ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Typography>No thread post yet</Typography>
+                  </Box>
+                ) : (
+                  <ImageList sx={{ width: 500 }}>
+                    {thread.images!.map((obj) => (
+                      <ImageListItem>
+                        <img
+                          srcSet={`${obj.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                          src={`${obj.imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                          alt={obj.id?.toString()}
+                          loading="lazy"
+                          style={{height:"100%",overflow:"hidden"}}
+                        />
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
+                )
+              )
+            )}
+          </TabPanel>
+        </TabContext>
       </Box>
     </Box>
   );
