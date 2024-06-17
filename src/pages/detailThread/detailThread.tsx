@@ -255,7 +255,7 @@ function DetailThread() {
                 borderBottom: "1px solid grey",
               }}
             >
-              <ReplyCard reply={reply} profileId={profile?.id!} />
+              <ReplyCard reply={reply} profile={profile}  />
             </Box>
           ))}
         </Box>

@@ -1,5 +1,5 @@
 export interface IThread {
-   id?: number;
+   id?: string;
    content?: string;
    images?: IThreadImage[];
    author: IAuthor;
@@ -11,7 +11,7 @@ export interface IThread {
 
 export interface IReply{
    threadId?:string
-   id?: number;
+   id?: string;
    content?: string;
    images?: IThreadImage[];
    author: IAuthor;

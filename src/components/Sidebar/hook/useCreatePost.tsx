@@ -17,7 +17,7 @@ const usePostThread:any = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [posting,setPosting] = useState(false)
-        const profile = useAppSelector((state) => state.profile);
+    const profile = useAppSelector((state) => state.profile);
 
     const postThread = async (e: React.MouseEvent) => {
         e.preventDefault();

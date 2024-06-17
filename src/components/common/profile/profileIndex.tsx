@@ -7,41 +7,38 @@ import {
   ImageList,
   ImageListItem,
 } from "@mui/material";
+import React,{ useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
-import React, { useEffect } from "react";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 import { getProfileAsync } from "../../../store/Asyncthunks/GetProfileAsync";
 import { useParams } from "react-router-dom";
 import { myProfileAsync } from "../../../store/Asyncthunks/profileAsync";
 import ThreadCard from "../ThreadCard";
 import { getThreadbyProfile } from "../../../store/Asyncthunks/getThreadProfileAsync";
 import ModalEdit from "./component/modalEdit";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 
 const Profile = () => {
+  const dispatch = useAppDispatch();
+  const { profileId } = useParams<{ profileId: string }>();
+
+  useEffect(() => {
+    dispatch(getProfileAsync(profileId));
+    dispatch(getThreadbyProfile(profileId));
+    dispatch(myProfileAsync());
+  }, [dispatch, profileId]);
+
   const profile = useAppSelector((state) => state.getProfile);
-  const dispath = useAppDispatch();
-  const Params = useParams();
-  useEffect(() => {
-    dispath(getProfileAsync(Params.profileId || ""));
-  }, [Params]);
-
   const profileLogin = useAppSelector((state) => state.profile);
-  useEffect(() => {
-    dispath(myProfileAsync());
-  }, []);
-
   const threads = useAppSelector((state) => state.ThreadbyProfile.threads);
-  useEffect(() => {
-    dispath(getThreadbyProfile(Params.profileId || ""));
-  }, []);
 
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
   return (
     <Box
       width={"100%"}
@@ -70,6 +67,7 @@ const Profile = () => {
                   ? profile.detailProfile.profile.cover
                   : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNS7GXzIFW6w2yv0B9qVkHc8lPiYmUiuiEfnrprAVn0A&s"
               }
+              alt="Cover"
             />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Avatar
@@ -80,7 +78,8 @@ const Profile = () => {
                   top: "-30px",
                   left: "5px",
                 }}
-              ></Avatar>
+                alt="Avatar"
+              />
               {profile.detailProfile.id === profileLogin.profile.id ? (
                 <ModalEdit
                   userId={profile.detailProfile.id!}
@@ -111,31 +110,20 @@ const Profile = () => {
             <Typography variant="h6" fontWeight={700}>
               {profile.detailProfile.fullname}
             </Typography>
-            <Typography
-              marginTop={1}
-              variant="body2"
-              fontWeight={500}
-              color="gray"
-            >
+            <Typography marginTop={1} variant="body2" fontWeight={500} color="gray">
               @{profile.detailProfile?.profile?.username}
             </Typography>
-            <Typography fontWeight={400}>
-              {profile.detailProfile.profile?.bio}
-            </Typography>
+            <Typography fontWeight={400}>{profile.detailProfile.profile?.bio}</Typography>
           </Box>
           <Box sx={{ display: "flex", gap: "10px", mt: "15px" }}>
             <Box sx={{ display: "flex", gap: "5px" }}>
-              <Typography>
-                {profile.detailProfile.following?.length || 0}
-              </Typography>
+              <Typography>{profile.detailProfile.following?.length || 0}</Typography>
               <Typography fontWeight={400} color="gray">
                 Following
               </Typography>
             </Box>
             <Box sx={{ display: "flex", gap: "5px" }}>
-              <Typography>
-                {profile.detailProfile.follower?.length || 0}
-              </Typography>
+              <Typography>{profile.detailProfile.follower?.length || 0}</Typography>
               <Typography fontWeight={400} color="gray">
                 Followers
               </Typography>
@@ -204,7 +192,6 @@ const Profile = () => {
                 <Typography>No thread post yet</Typography>
               </Box>
             ) : (
-              threads &&
               threads.map((item) => <ThreadCard key={item.id} thread={item} />)
             )}
           </TabPanel>
@@ -238,13 +225,13 @@ const Profile = () => {
                 ) : (
                   <ImageList sx={{ width: 500 }}>
                     {thread.images!.map((obj) => (
-                      <ImageListItem>
+                      <ImageListItem key={obj.id}>
                         <img
                           srcSet={`${obj.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                           src={`${obj.imageUrl}?w=164&h=164&fit=crop&auto=format`}
                           alt={obj.id?.toString()}
                           loading="lazy"
-                          style={{height:"100%",overflow:"hidden"}}
+                          style={{ height: "100%", overflow: "hidden" }}
                         />
                       </ImageListItem>
                     ))}
