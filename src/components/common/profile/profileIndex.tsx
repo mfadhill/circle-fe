@@ -6,8 +6,9 @@ import {
   Tab,
   ImageList,
   ImageListItem,
+  Grid,
 } from "@mui/material";
-import React,{ useEffect } from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { getProfileAsync } from "../../../store/Asyncthunks/GetProfileAsync";
 import { useParams } from "react-router-dom";
@@ -34,6 +35,28 @@ const Profile = () => {
   const threads = useAppSelector((state) => state.ThreadbyProfile.threads);
 
   const [value, setValue] = React.useState("1");
+  const [imageArr, setImagesArr] = React.useState<any[]>([]);
+  const [_, setFilterReply] = React.useState<any[]>([]);
+
+  useEffect(() => {
+    if (threads) {
+      const filteredThreads = threads.filter(
+        (thread) => thread.threadId === null
+      );
+      setFilterReply(filteredThreads);
+
+      const images = filteredThreads
+        .filter((thread) => thread.images && thread.images.length > 0)
+        .flatMap((thread) => thread.images);
+
+      setImagesArr(images);
+    }
+  }, [threads]);
+
+  useEffect(() => {
+    console.log([imageArr]);
+  }, [imageArr]);
+
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -65,7 +88,7 @@ const Profile = () => {
               src={
                 profile.detailProfile.profile?.cover
                   ? profile.detailProfile.profile.cover
-                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNS7GXzIFW6w2yv0B9qVkHc8lPiYmUiuiEfnrprAVn0A&s"
+                  : "https://images.unsplash.com/photo-1708660575990-101db3b00294"
               }
               alt="Cover"
             />
@@ -179,7 +202,7 @@ const Profile = () => {
             </TabList>
           </Box>
           <TabPanel value="1">
-            {threads.length === 0 ? (
+            {imageArr.length === 0 ? (
               <Box
                 sx={{
                   display: "flex",
@@ -195,8 +218,8 @@ const Profile = () => {
               threads.map((item) => <ThreadCard key={item.id} thread={item} />)
             )}
           </TabPanel>
-          <TabPanel value="2">
-            {threads.length === 0 ? (
+          <TabPanel value="2" sx={{ padding: 2 }}>
+            {imageArr.length === 0 ? (
               <Box
                 sx={{
                   display: "flex",
@@ -209,34 +232,34 @@ const Profile = () => {
                 <Typography>No media post yet</Typography>
               </Box>
             ) : (
-              threads.map((thread) =>
-                thread.images?.length === 0 ? (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "100%",
-                      textAlign: "center",
-                    }}
-                  >
-                    <Typography>No thread post yet</Typography>
-                  </Box>
-                ) : (
-                  <ImageList sx={{ width: 500 }}>
-                    {thread.images!.map((obj) => (
+              imageArr.length === 0 ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography>No thread post yet</Typography>
+                </Box>
+              ) : (
+                <Box sx={{ padding: 0, display: "flex" }} >
+                  <ImageList sx={{ width: "500" }}>
+                    {imageArr.map((obj: any) => (
                       <ImageListItem key={obj.id}>
                         <img
                           srcSet={`${obj.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                           src={`${obj.imageUrl}?w=164&h=164&fit=crop&auto=format`}
                           alt={obj.id?.toString()}
                           loading="lazy"
-                          style={{ height: "100%", overflow: "hidden" }}
+                          style={{ height: "100%", overflow: "hidden", width: "100%" }}
                         />
                       </ImageListItem>
                     ))}
                   </ImageList>
-                )
+                </Box>
               )
             )}
           </TabPanel>

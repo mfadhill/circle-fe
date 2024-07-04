@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IAuthor, Ifollowing } from "../../types/app";
+import { IAuthor } from "../../types/app";
 import { myProfileAsync } from "../Asyncthunks/profileAsync";
 
 const initialState: { profile: IAuthor } = {
@@ -11,7 +11,7 @@ export const profileSlice = createSlice({
     initialState,
     reducers: {
         toggleFollow: (state, action: PayloadAction<string>) => {
-            const userId:string |undefined = action.payload;
+            const userId: string | undefined = action.payload;
             const index = state.profile.following.findIndex(
                 (following) => following.followingId === userId
             );

@@ -114,7 +114,7 @@ const Search = () => {
             <PersonSearchIcon sx={{ color: "grey", marginRight: "8px" }} />
           ),
           endAdornment: (
-            <IconButton onClick={findUser}>
+            <IconButton onClick={findUser} >
               <SearchRounded />
             </IconButton>
           ),
@@ -183,7 +183,7 @@ const Search = () => {
               }}
             >
               <Box
-                
+
               >
                 <Link style={{
                   display: "flex",
@@ -192,28 +192,28 @@ const Search = () => {
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   marginRight: "10px",
-                  textDecoration:"none",
-                  color:"white"
-                }} 
-                to={`/profile/${obj.id}`}>
-                <Avatar src={obj.profile?.photoProfile} />
-                <Box
-                  sx={{
-                    marginLeft: "20px",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Typography variant="body1" fontWeight={700}>
-                    {obj.fullname}
-                  </Typography>
-                  <Typography variant="body2" color="grey" fontWeight={300}>
-                    @{obj.profile?.username}
-                  </Typography>
-                  <Typography variant="body2" fontWeight={500}>
-                    {obj.profile?.bio}
-                  </Typography>
-                </Box>
+                  textDecoration: "none",
+                  color: "white"
+                }}
+                  to={`/profile/${obj.id}`}>
+                  <Avatar src={obj.profile?.photoProfile} />
+                  <Box
+                    sx={{
+                      marginLeft: "20px",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Typography variant="body1" fontWeight={700}>
+                      {obj.fullname}
+                    </Typography>
+                    <Typography variant="body2" color="grey" fontWeight={300}>
+                      @{obj.profile?.username}
+                    </Typography>
+                    <Typography variant="body2" fontWeight={500}>
+                      {obj.profile?.bio}
+                    </Typography>
+                  </Box>
                 </Link>
               </Box>
               <Button

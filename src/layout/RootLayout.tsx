@@ -57,7 +57,7 @@ const RootLayout = () => {
             alignContent: "center",
             marginLeft: "15px",
             paddingY: "20px",
-            width:"100%"
+            width: "100%"
           }}
         >
           <Index />

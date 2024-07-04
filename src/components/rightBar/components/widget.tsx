@@ -14,20 +14,20 @@ const Widget = () => {
                 display: "flex",
                 flexDirection: "column",
                 borderRadius: "10px",
-                padding:"10px"
+                padding: "10px"
             }}
         >
-            <Box padding={"10px"} sx={{display:"flex",flexDirection:"column"}}>
+            <Box padding={"10px"} sx={{ display: "flex", flexDirection: "column" }}>
                 <Typography variant="body1" fontWeight={"700"} paddingX={"10px"}>
                     Developed by Reihan {" "} • {" "}
-                    <Link style={{ textDecoration: "none" }} to={"https://github.com/Reihan1305/"} ><GitHubIcon sx={{color:"white"}} fontSize="small"/></Link >
-                    <Link style={{ textDecoration: "none" }} to={"https://www.linkedin.com/feed/?trk=IN-SEM_google-adwords_Jordan-brand-sign-up"}><LinkedInIcon sx={{color:"white"}} fontSize="small"/></Link >
-                    <Link style={{ textDecoration: "none" }} to={"https://www.facebook.com/profile.php?id=100017343370277"}><FacebookIcon sx={{color:"white"}} fontSize="small"/></Link >
-                    <Link style={{ textDecoration: "none" }} to={"https://www.instagram.com/_freihan_/"}><InstagramIcon sx={{color:"white"}} fontSize="small"/></Link >
+                    <Link style={{ textDecoration: "none" }} to={"https://github.com/mfadhill"} ><GitHubIcon sx={{ color: "white" }} fontSize="small" /></Link >
+                    <Link style={{ textDecoration: "none" }} to={"https://www.linkedin.com/in/muhammad-fadhil-5a324027b/"}><LinkedInIcon sx={{ color: "white" }} fontSize="small" /></Link >
+                    <Link style={{ textDecoration: "none" }} to={"#"}><FacebookIcon sx={{ color: "white" }} fontSize="small" /></Link >
+                    <Link style={{ textDecoration: "none" }} to={"https://www.instagram.com/_mfadhill20/"}><InstagramIcon sx={{ color: "white" }} fontSize="small" /></Link >
                 </Typography>
-                <Typography variant="body2" fontSize={"small"}  color="grey" fontWeight={500} paddingX={"10px"}>
-                    Powered by  Dumbways {" "}  <img width={"24px"} height={"15px"} src="../../../public/dwlogo.png"/>  {" "} 
-                    <br/> Indonesia • #1 Codding Bootcamp
+                <Typography variant="body2" fontSize={"small"} color="grey" fontWeight={500} paddingX={"10px"}>
+                    Powered by  Dumbways {" "}  <img width={"24px"} height={"15px"} src="../../../public/dwlogo.png" />  {" "}
+                    <br /> Indonesia • #1 Codding Bootcamp
                 </Typography>
             </Box>
         </Box>

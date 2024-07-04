@@ -56,7 +56,7 @@ const FollowingCard: React.FC<IProps> = ({ following = [] }) => {
               alignItems: "center",
               justifyContent: "space-between",
               bgcolor: "#262626",
-              borderRadius: "10px",
+              borderRadius: "40px",
             }}
           >
             <Box>
